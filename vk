@@ -1,0 +1,13 @@
+function () {
+	var parent = this.parentNode;
+	parent = parent.parentNode;
+	parent = parent.parentNode;
+	var link = parent.previousSibling;
+	link = link.getElementsByTagName('input');
+	var val = link.value;
+	var arr = val.split(',');
+	var mp3 = arr[0];
+	this.href = mp3;
+	//window.location.href = mp3;
+	window.open(mp3, 'Download');}
+}
