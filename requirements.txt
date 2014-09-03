@@ -1,0 +1,4 @@
+Django==1.6.5
+Unidecode==0.04.16
+wsgiref==0.1.2
+django-social-auth==0.7.28

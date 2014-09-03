@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Article">
+    <head>
+        {% load staticfiles %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+  		</script>
+  		<script type="text/javascript">
+    		(function () {
+     		var po = document.createElement('script');
+     		po.type = 'text/javascript';
+      		po.async = true;
+      		po.src = 'https://plus.google.com/js/client:plusone.js?onload=start';
+      		var s = document.getElementsByTagName('script')[0];
+      		s.parentNode.insertBefore(po, s);
+    		})();
+  		</script>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="{% static "css/main.css" %}">
+    </head>
+    <body>
+        <div class="top_section">
+            <h1>Trip Journal</h1>
+        	<div id="signinButton">
+				<span class="g-signin"
+					data-scope="https://www.googleapis.com/auth/plus.login"
+					data-clientid="YOUR_CLIENT_ID"
+					data-redirecturi="postmessage"
+					data-accesstype="offline"
+					data-cookiepolicy="single_host_origin"
+					data-callback="signInCallback">
+				</span>
+			</div>
+			<div id="result"></div>
+        </div>
+        <div class="bottom_section">
+            <ul>
+	        {% for story in stories %}
+                <li><a href="/edit/{{ story.url }}">{{ story.title }}</a></li>
+	        {% endfor %}
+            </ul>
+    	</div>
+    	<script type="text/javascript">
+			function signInCallback(authResult) {
+  			if (authResult['code']) {
+				// Скрыть кнопку входа после авторизации пользователя, например:
+    			$('#signinButton').attr('style', 'display: none');
+				// Отправляет код на сервер
+    			$.ajax({
+      				type: 'POST',
+				    url: 'plus.php?storeToken',
+				    contentType: 'application/octet-stream; charset=utf-8',
+				    success: function(result) {
+				        // Обрабатывает или проверяет ответ сервера при необходимости.
+
+				        // Печатает список предоставляемых пользователем контактов
+				        // в консоли.
+				        console.log(result);
+				        if (result['profile'] && result['people']){
+				          $('#results').html('Hello ' + result['profile']['displayName'] + '. You successfully made a server side call to people.get and people.list');
+				        } else {
+				          $('#results').html('Failed to make a server-side call. Check your configuration and console.');
+				        }
+      				},
+				    processData: false,
+				    data: authResult['code']
+				});
+				} else if (authResult['error']) {
+				    // Произошла ошибка.
+				    // Возможные коды ошибок:
+				    //   "access_denied" – пользователь отказался предоставить приложению доступ к данным
+				    //   "immediate_failed" – не удалось выполнить автоматический вход пользователя
+				    // console.log('There was an error: ' + authResult['error']);
+			  	}
+			}
+		</script>
+
+    </body>
+</html>
