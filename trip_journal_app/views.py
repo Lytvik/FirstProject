@@ -10,7 +10,8 @@ from trip_journal_app.utils import (
 
 import random
 import string
-from apiclient.discovery import build
+
+from apiclient import discovery
 
 from flask import Flask
 from flask import make_response
@@ -24,7 +25,7 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
 from simplekv.memory import DictStore
-from flaskext.kvsession import KVSessionExtension
+from flask.ext.kvsession import KVSessionExtension
 
 
 # Create your views here.
@@ -91,7 +92,7 @@ KVSessionExtension(store, app)
 # Do not change this assignment.
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-SERVICE = build('plus', 'v1')
+SERVICE = discovery.build('plus', 'v1')
 
 
 #@app.route('/', methods=['GET'])
